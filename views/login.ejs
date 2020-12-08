@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/css/register.css" />
+    <title>Ligi | Page</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h2>Sign in</h2>
+      </div>
+      <%- include("./partials/messages") %>
+      <form action="/api/user/login" id="form" class="form" method="POST">
+        <div class="Form-control">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            placeholder="Email address"
+            name="email"
+            id="email"
+            value="<%= typeof email != 'undefined' ? email : '' %>"
+          />
+          <i class="fas fa-check-circle"></i>
+          <i class="fas fa-exclamation-circle"></i>
+          <small>Error message</small>
+        </div>
+        <div class="Form-control">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            placeholder="Password"
+            name="password"
+            id="password"
+            value="<%= typeof password != 'undefined' ? password : '' %>"
+          />
+          <i class="fas fa-check-circle"></i>
+          <i class="fas fa-exclamation-circle"></i>
+          <small>Error message</small>
+        </div>
+        <button>Submit</button>
+      </form>
+      <p class="container lead links">
+        Don't have an Account? <a href="/api/user/register">Register</a>
+      </p>
+    </div>
+
+    <!-- <script src="/js/login.js"></script> -->
+  </body>
+</html>

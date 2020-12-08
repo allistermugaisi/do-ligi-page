@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+      integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/css/register.css" />
+    <title>Ligi | Page</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h2>Create Account</h2>
+      </div>
+      <%- include("./partials/messages") %>
+      <form action="/api/user/register" method="POST" id="form" class="form">
+        <div class="Form-control">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            placeholder="Username"
+            name="username"
+            id="username"
+            value="<%= typeof username != 'undefined' ? username : '' %>"
+          />
+          <i class="fas fa-check-circle"></i>
+          <i class="fas fa-exclamation-circle"></i>
+          <small>Error message</small>
+        </div>
+        <div class="Form-control">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            placeholder="Email address"
+            name="email"
+            id="email"
+            value="<%= typeof email != 'undefined' ? email : '' %>"
+          />
+          <i class="fas fa-check-circle"></i>
+          <i class="fas fa-exclamation-circle"></i>
+          <small>Error message</small>
+        </div>
+        <div class="Form-control">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            placeholder="Password"
+            name="password"
+            id="password"
+            value="<%= typeof password != 'undefined' ? password : '' %>"
+          />
+          <i class="fas fa-check-circle"></i>
+          <i class="fas fa-exclamation-circle"></i>
+          <small>Error message</small>
+        </div>
+        <div class="Form-control">
+          <label for="password2">Password check</label>
+          <input
+            type="password"
+            placeholder="Confirm password"
+            name="password2"
+            id="password2"
+            value="<%= typeof password2 != 'undefined' ? password2 : '' %>"
+          />
+          <i class="fas fa-check-circle"></i>
+          <i class="fas fa-exclamation-circle"></i>
+          <small>Error message</small>
+        </div>
+        <button type="submit">Signup</button>
+      </form>
+      <p class="container lead links">
+        Have An Account? <a href="/api/user/login">Login</a>
+      </p>
+    </div>
+
+    <!-- <script src="/js/register.js"></script> -->
+  </body>
+</html>

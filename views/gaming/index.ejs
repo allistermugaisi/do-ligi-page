@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/gaming.css" />
+    <title>Ligi | Page</title>
+  </head>
+  <body>
+    <h1 class="title-shop">Gaming Arena</h1>
+    <a href="/gaming/new" class="btn btn-success">New Arena</a>
+    <main class="main bd-grid">
+      <% zones.forEach(arena => { %>
+      <article class="card">
+        <div class="card__img">
+          <img src="/images/controller.jpg" alt="" />
+        </div>
+        <div class="card__name">
+          <p><%- arena.location %></p>
+        </div>
+        <div class="card__precis">
+          <form
+            action="gaming/delete/<%= arena.id%>?_method=DELETE"
+            method="POST"
+          >
+            <button type="submit" class="card__icon">
+              <ion-icon name="trash-outline"></ion-icon>
+            </button>
+          </form>
+
+          <div>
+            <span class="card__preci card__preci--before"
+              ><%- arena.name %></span
+            >
+            <a href="gaming/<%= arena.slug%>" class="btn btn-success"
+              >Join Now</a
+            >
+          </div>
+          <a href="gaming/edit/<%= arena.id %>" class="card__icon"
+            ><ion-icon name="ellipsis-vertical-circle-outline"></ion-icon
+          ></a>
+        </div>
+      </article>
+      <%})%>
+    </main>
+
+    <!-- ICONS -->
+    <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+  </body>
+</html>
