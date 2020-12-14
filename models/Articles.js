@@ -6,6 +6,13 @@ const { JSDOM } = require("jsdom");
 const dompurify = createDomPurify(new JSDOM().window);
 
 const articleSchema = new mongoose.Schema({
+  author: {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    username: String,
+  },
   title: {
     type: String,
     required: true,

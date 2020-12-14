@@ -36,17 +36,16 @@
           <li class="navbar-item">
             <a href="#" class="navbar-links">Contact</a>
           </li>
-          <% if(locals.login !== ""){ %>
-            <!-- <li class="navbar-btn">
-              <a href="/api/user/profile" class="navbar-links">Profile</a>
-            </li> -->
+          <% if(!currentUser){ %>
             <li class="navbar-btn">
-              <a href="/api/user/logout" class="button">Logout</a>
+              <a href="/user/login" class="button">Login</a>
             </li>
             <% } else { %>
-           
               <li class="navbar-btn">
-                <a href="/api/user/register" class="button">Sign up</a>
+                <a href="/user/profile" class="navbar-links">Profile</a>
+              </li>
+              <li class="navbar-btn">
+                <a href="/user/logout" class="button">Logout</a>
               </li>
             <% } %>      
         </ul>

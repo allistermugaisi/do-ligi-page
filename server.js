@@ -1,15 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("passport");
-const { ensureAuthenticated } = require("./middleware/auth.js");
-const Article = require("./models/Articles");
 const articleRouter = require("./routes/articles");
 const gamingRouter = require("./routes/gaming");
+const adminRouter = require("./routes/admin");
 const userRouter = require("./routes/auth");
 const methodOverride = require("method-override");
 const flash = require("connect-flash");
 const session = require("express-session");
-const { resolveNaptr } = require("dns");
 const app = express();
 
 if (process.env.NODE_ENV !== "production") {
@@ -20,7 +18,7 @@ if (process.env.NODE_ENV !== "production") {
 require("./config/passport")(passport);
 
 mongoose
-  .connect(process.env.DB_CONNECT, {
+  .connect(process.env.DB_SERVER_CONNECT, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -33,16 +31,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));
 app.use(express.static("public"));
-
-app.get("/", async (req, res) => {
-  // const articles = await Article.find().sort({ createdAt: "desc" });
-  res.render("index");
-});
-
-app.get("/admin", async (req, res) => {
-  // const articles = await Article.find().sort({ createdAt: "desc" });
-  res.render("admin/index");
-});
 
 // Express Session
 app.use(
@@ -62,16 +50,22 @@ app.use(flash());
 
 // Global vars
 app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
   res.locals.success_msg = req.flash("success_msg");
   res.locals.error_msg = req.flash("error_msg");
   res.locals.error = req.flash("error");
   next();
 });
 
+app.get("/", async (req, res) => {
+  res.render("index");
+});
+
 // Routes middleware
-app.use("/api/user", userRouter);
+app.use("/user", userRouter);
 app.use("/articles", articleRouter);
 app.use("/gaming", gamingRouter);
+app.use("/admin", adminRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, console.log(`Server is running on port ${PORT}`));

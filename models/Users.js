@@ -7,12 +7,19 @@ const userSchema = new mongoose.Schema({
     min: 6,
     max: 255,
   },
+  avatar: String,
   email: {
     type: String,
     required: true,
     min: 6,
     max: 255,
   },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
   password: {
     type: String,
     required: true,

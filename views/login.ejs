@@ -15,10 +15,10 @@
   <body>
     <div class="container">
       <div class="header">
-        <h2>Sign in</h2>
+        <h2>Login</h2>
       </div>
       <%- include("./partials/messages") %>
-      <form action="/api/user/login" id="form" class="form" method="POST">
+      <form action="/user/login" id="form" class="form" method="POST">
         <div class="Form-control">
           <label for="email">Email</label>
           <input
@@ -46,10 +46,13 @@
           <small>Error message</small>
         </div>
         <button>Submit</button>
+        <p class="lead links mt-2">
+          <a href="/">Back</a>
+        </p>
+        <p class="lead links">
+          Not a member? <a href="/user/register">Register</a>
+        </p>
       </form>
-      <p class="container lead links">
-        Don't have an Account? <a href="/api/user/register">Register</a>
-      </p>
     </div>
 
     <!-- <script src="/js/login.js"></script> -->

@@ -2,24 +2,51 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const Gaming = require("../models/Gaming");
+const { ensureAdminAuthenticated } = require("../middleware/auth");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const arena = await Gaming.find().sort({ createdAt: "desc" });
-  res.render("gaming/index", { zones: arena });
+  let noMatch = null;
+  if (req.query.search) {
+    const regex = new RegExp(escapeRegex(req.query.search), "gi");
+    // Get all gaming arena's from DB
+    Gaming.find({ name: regex }, function (err, arena) {
+      if (err) {
+        console.log(err);
+      } else {
+        if (arena.length < 1) {
+          noMatch = "Gaming arena not found, please try again.";
+        }
+        res.render("gaming/index", { zones: arena, noMatch: noMatch });
+      }
+    });
+  } else {
+    const arena = await Gaming.find().sort({ createdAt: "desc" });
+    res.render("gaming/index", { zones: arena, noMatch: noMatch });
+  }
 });
 
 router.get("/details", async (req, res) => {
   res.send("Gaming details");
 });
 
-router.get("/new", async (req, res) => {
-  res.render("gaming/new", { arena: new Gaming() });
+router.get("/new", ensureAdminAuthenticated, async (req, res) => {
+  if (req.user.isAdmin) {
+    res.render("gaming/new", { arena: new Gaming() });
+  } else {
+    req.flash("error_msg", "You are not admin and can't perform that action!");
+    res.redirect("/admin/login");
+  }
 });
 
-router.get("/edit/:id", async (req, res) => {
-  const arena = await Gaming.findById(req.params.id);
-  res.render("gaming/edit", { arena: arena });
+router.get("/edit/:id", ensureAdminAuthenticated, async (req, res) => {
+  if (req.user.isAdmin) {
+    const arena = await Gaming.findById(req.params.id);
+    res.render("gaming/edit", { arena: arena });
+  } else {
+    req.flash("error_msg", "You are not admin and can't perform that action!");
+    res.redirect("/admin/login");
+  }
 });
 
 router.get("/:slug", async (req, res) => {
@@ -138,7 +165,6 @@ router.put(
     const obj = JSON.parse(JSON.stringify(req.body)); // req.body = [Object: null prototype] { title: 'product' }
     const { name, location, fee, consoles, players } = obj;
     let errors = [];
-    console.log(obj);
     // Check required fields
     if (!name || !location || !fee || !consoles || !players) {
       errors.push({ msg: "Please fill in all fields!" });
@@ -155,16 +181,20 @@ router.put(
       });
     }
     req.arena = await Gaming.findById(req.params.id);
-    console.log(req.arena);
     next();
   },
 
   saveArenaAndRedirect("edit")
 );
 
-router.delete("/delete/:id", async (req, res) => {
-  await Gaming.findByIdAndDelete(req.params.id);
-  res.redirect("/gaming");
+router.delete("/delete/:id", ensureAdminAuthenticated, async (req, res) => {
+  if (req.user.isAdmin) {
+    await Gaming.findByIdAndDelete(req.params.id);
+    res.redirect("/gaming");
+  } else {
+    req.flash("error_msg", "You are not admin and can't perform that action!");
+    res.redirect("/admin/login");
+  }
 });
 
 function saveArenaAndRedirect(path) {
@@ -175,6 +205,8 @@ function saveArenaAndRedirect(path) {
     arena.fee = req.body.fee;
     arena.players = req.body.players;
     arena.consoles = req.body.consoles;
+    (arena.creator.id = req.user._id),
+      (arena.creator.username = req.user.username);
     // console.log(arena);
     try {
       arena = await arena.save();
@@ -184,5 +216,10 @@ function saveArenaAndRedirect(path) {
       res.render(`gaming/${path}`, { arena: arena });
     }
   };
+}
+
+// Define escapeRegex function for search feature
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
 module.exports = router;

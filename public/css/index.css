@@ -118,61 +118,15 @@
 .button:hover {
   background: #4837ff;
   transition-timing-function: all 0.3s ease;
+  text-decoration: none;
+  color: #fff;
 }
 .navbar-links:hover {
   color: #f77062;
   transition: all 0.3s ease;
-}
-.wrapper .navbar .left ul,
-.wrapper .navbar .right ul li a {
-  display: flex;
-  align-items: center;
-  height: 40px;
+  text-decoration: none;
 }
 
-.right img {
-  margin: 0 10px;
-}
-
-.right a {
-  text-align: right;
-}
-
-.right a span {
-  font-size: 10px;
-}
-
-.right ul li {
-  position: relative;
-}
-
-.right ul li .dropdown {
-  position: absolute;
-  top: 65px;
-  right: 0;
-  background: #fff;
-  padding: 10px 25px;
-  border-radius: 5px;
-  display: none;
-}
-
-.right ul li .dropdown .fas {
-  margin-right: 10px;
-}
-
-.right ul li .dropdown:before {
-  content: "";
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 10px solid;
-  border-color: transparent transparent #fff transparent;
-}
-
-.right ul li.active .dropdown {
-  display: block;
-}
 /* iPads (portrait and landscape) ----------- */
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
   .main-container {

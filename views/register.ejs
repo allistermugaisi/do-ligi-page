@@ -24,7 +24,7 @@
         <h2>Create Account</h2>
       </div>
       <%- include("./partials/messages") %>
-      <form action="/api/user/register" method="POST" id="form" class="form">
+      <form action="/user/register" method="POST" id="form" class="form">
         <div class="Form-control">
           <label for="username">Username</label>
           <input
@@ -78,10 +78,13 @@
           <small>Error message</small>
         </div>
         <button type="submit">Signup</button>
+        <p class="lead links mt-2">
+          <a href="/">Back</a>
+        </p>
+        <p class="lead links">
+          Have An Account ? <a href="/user/login">Login</a>
+        </p>
       </form>
-      <p class="container lead links">
-        Have An Account? <a href="/api/user/login">Login</a>
-      </p>
     </div>
 
     <!-- <script src="/js/register.js"></script> -->

@@ -10,9 +10,46 @@
       integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="/css/index.css" />
   </head>
   <body>
-    <div class="container">
+     <!-- Navbar -->
+     <nav class="navbar">
+      <div class="navbar-container">
+        <a href="/" id="navbar-logo"><i class="fas fa-gem"></i>Ligi Page</a>
+        <div class="navbar-toggle" id="mobile-menu">
+          <span class="bar"></span> <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+        <ul class="navbar-menu">
+          <li class="navbar-item">
+            <a href="/" class="navbar-links">Home</a>
+          </li>
+          <li class="navbar-item">
+            <a href="/articles" class="navbar-links">Blog</a>
+          </li>
+          <li class="navbar-item">
+            <a href="#" class="navbar-links">About</a>
+          </li>
+          <li class="navbar-item">
+            <a href="#" class="navbar-links">Contact</a>
+          </li>
+          <% if(!currentUser){ %>
+            <li class="navbar-btn">
+              <a href="/user/login" class="button">Login</a>
+            </li>
+            <% } else { %>
+              <li class="navbar-btn">
+                <a href="/user/profile" class="navbar-links">Profile</a>
+              </li>
+              <li class="navbar-btn">
+                <a href="/user/logout" class="button">Logout</a>
+              </li>
+            <% } %>      
+        </ul>
+    </nav>
+
+    <div class="container mt-5">
       <h1 class="mb-4">New Article</h1>
 
       <form action="/articles" method="POST">

@@ -3,6 +3,13 @@ const slugify = require("slugify");
 
 const gamingSchema = new mongoose.Schema(
   {
+    creator: {
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+      username: String,
+    },
     name: {
       type: String,
       maxlength: 50,

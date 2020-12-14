@@ -3,24 +3,39 @@ const User = require("../models/Users");
 const brcypt = require("bcryptjs");
 const passport = require("passport");
 const router = express.Router();
-const { forwardUserAuthenticated } = require("../middleware/auth");
+const { ensureAdminAuthenticated } = require("../middleware/auth");
 
-router.get("/register", forwardUserAuthenticated, (req, res) => {
-  res.render("register");
+router.get("/", ensureAdminAuthenticated, async (req, res) => {
+  if (req.user.isAdmin) {
+    res.render("admin/index");
+  } else {
+    req.flash("error_msg", "You are not admin and can't view that resource!");
+    res.redirect("/admin/login");
+  }
 });
 
-router.get("/login", forwardUserAuthenticated, (req, res) => {
-  res.render("login");
+router.get("/login", async (req, res) => {
+  res.render("admin/login");
+});
+
+router.get("/register", async (req, res) => {
+  res.render("admin/register");
 });
 
 // Regiter
 router.post("/register", async (req, res) => {
   const obj = JSON.parse(JSON.stringify(req.body)); // req.body = [Object: null prototype] { title: 'product' }
-  const { username, email, password, password2 } = obj;
+  const { username, email, admincode, password, password2 } = obj;
+
   let errors = [];
   // Check required fields
-  if (!username || !email || !password || !password2) {
+  if (!username || !email || !admincode || !password || !password2) {
     errors.push({ msg: "Please fill in all fields!" });
+  }
+
+  // Check if user is admin
+  if (admincode !== "secretcode@123") {
+    errors.push({ msg: "Invalid admin secret code!" });
   }
 
   // Check if passwords match
@@ -34,9 +49,10 @@ router.post("/register", async (req, res) => {
   }
 
   if (errors.length > 0) {
-    res.render("register", {
+    res.render("admin/register", {
       errors,
       username,
+      admincode,
       email,
       password,
       password2,
@@ -47,9 +63,10 @@ router.post("/register", async (req, res) => {
     // Check if the user already exists
     if (emailExist) {
       errors.push({ msg: "Email is already registered!" });
-      res.render("register", {
+      res.render("admin/register", {
         errors,
         username,
+        admincode,
         email,
         password,
         password2,
@@ -67,27 +84,29 @@ router.post("/register", async (req, res) => {
         password: hashedPassword,
         password2: hashedPassword2,
       });
-      // console.log(user);
+
+      if (admincode === "secretcode@123") {
+        user.isAdmin = true;
+      }
+
       try {
         const savedUser = await user.save();
-        // res.send({ user: user._id });
-        req.flash("success_msg", "You are now registered and can login!");
-        res.redirect("/user/login");
+
+        req.flash("success_msg", "Successfully registered as an admin!");
+        res.redirect("/admin/login");
       } catch (err) {
         res.status(400).send(err);
       }
     }
   }
-
-  // console.log(errors);
 });
 
 // Login
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", {
-    successRedirect: "/",
-    successFlash: "Welcome to LigiPage!",
-    failureRedirect: "/user/login",
+    successRedirect: "/admin",
+    successFlash: "Welcome to admin dashboard of Ligipage!",
+    failureRedirect: "/admin/login",
     failureFlash: true,
   })(req, res, next);
 });
@@ -96,7 +115,7 @@ router.post("/login", (req, res, next) => {
 router.get("/logout", (req, res) => {
   req.logout();
   req.flash("success_msg", "You are logged out!");
-  res.redirect("/user/login");
+  res.redirect("/admin/login");
 });
 
 module.exports = router;
