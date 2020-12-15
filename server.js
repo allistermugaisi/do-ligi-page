@@ -17,6 +17,7 @@ if (process.env.NODE_ENV !== "production") {
 // Passport Config
 require("./config/passport")(passport);
 
+// On development server use DB_CONNECT || On production server use DB_SERVER_CONNECT
 mongoose
   .connect(process.env.DB_SERVER_CONNECT, {
     useNewUrlParser: true,
